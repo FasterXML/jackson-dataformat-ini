@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.format.InputAccessor;
 import com.fasterxml.jackson.core.format.MatchStrength;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.core.util.BufferRecycler;
+
 import com.fasterxml.jackson.dataformat.ini.impl.UTF8Reader;
 
 public class IniFactory extends JsonFactory
@@ -24,13 +25,13 @@ public class IniFactory extends JsonFactory
      * Bitfield (set of flags) of all parser features that are enabled
      * by default.
      */
-    final static int DEFAULT_CSV_PARSER_FEATURE_FLAGS = IniParser.Feature.collectDefaults();
+    final static int DEFAULT_FORMAT_PARSER_FEATURE_FLAGS = IniParser.Feature.collectDefaults();
 
     /**
      * Bitfield (set of flags) of all generator features that are enabled
      * by default.
      */
-    final static int DEFAULT_CSV_GENERATOR_FEATURE_FLAGS = IniGenerator.Feature.collectDefaults();
+    final static int DEFAULT_FORMAT_GENERATOR_FEATURE_FLAGS = IniGenerator.Feature.collectDefaults();
 
     // could make it use Platform default too but...
     protected final static char[] DEFAULT_LF = { '\n' };
@@ -40,11 +41,13 @@ public class IniFactory extends JsonFactory
     /* Configuration
     /**********************************************************************
      */
+
+    protected int _formatParserFeatures = DEFAULT_FORMAT_PARSER_FEATURE_FLAGS;
+
+    protected int _formatGeneratorFeatures = DEFAULT_FORMAT_GENERATOR_FEATURE_FLAGS;
+
+    protected IniConfig _formatConfig = IniConfig.std();
     
-    protected int _formatParserFeatures = DEFAULT_CSV_PARSER_FEATURE_FLAGS;
-
-    protected int _formatGeneratorFeatures = DEFAULT_CSV_GENERATOR_FEATURE_FLAGS;
-
     /*
     /**********************************************************************
     /* Factory construction, configuration
@@ -65,18 +68,19 @@ public class IniFactory extends JsonFactory
 
     public IniFactory(ObjectCodec oc) { super(oc); }
 
-    protected IniFactory(IniFactory src, ObjectCodec oc)
+    protected IniFactory(IniFactory src, ObjectCodec oc, IniConfig formatConfig)
     {
         super(src, oc);
         _formatParserFeatures = src._formatParserFeatures;
         _formatGeneratorFeatures = src._formatGeneratorFeatures;
+        _formatConfig = formatConfig;
     }
-    
+
     @Override
     public IniFactory copy()
     {
         _checkInvalidCopy(IniFactory.class);
-        return new IniFactory(this, null);
+        return new IniFactory(this, null, _formatConfig);
     }
 
     /*
@@ -88,11 +92,10 @@ public class IniFactory extends JsonFactory
     /**
      * Method that we need to override to actually make restoration go
      * through constructors etc.
-     * Also: must be overridden by sub-classes as well.
      */
     @Override
     protected Object readResolve() {
-        return new IniFactory(this, _objectCodec);
+        return new IniFactory(this, _objectCodec, _formatConfig);
     }
 
     /*                                                                                       
