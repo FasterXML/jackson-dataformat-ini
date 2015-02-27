@@ -10,6 +10,8 @@ Project is licensed under [Apache License 2.0](http://www.apache.org/licenses/LI
 
 # Status
 
+[![Build Status](https://travis-ci.org/FasterXML/jackson-dataformat-ini.svg)](https://travis-ci.org/FasterXML/jackson-dataformat-ini)
+
 Highly experimental: goal to make it usable with 2.5.
 
 ## Maven dependency
