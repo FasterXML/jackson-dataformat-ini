@@ -25,8 +25,8 @@ abstractions.
   </scm>
 
   <properties>
-    <jackson.version.annotations>2.5.0-SNAPSHOT</jackson.version.annotations>
-    <jackson.version.core>2.5.0-SNAPSHOT</jackson.version.core>
+    <jackson.version.annotations>2.5.1</jackson.version.annotations>
+    <jackson.version.core>2.5.1</jackson.version.core>
     <!-- Generate PackageVersion.java into this directory. -->
     <packageVersion.dir>com/fasterxml/jackson/dataformat/ini</packageVersion.dir>
     <packageVersion.package>${project.groupId}.ini</packageVersion.package>
